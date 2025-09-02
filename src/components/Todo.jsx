@@ -1,27 +1,39 @@
 import React, { useState } from 'react';
 
 function Todo() {
-    const [todo , setTodo] = useState([{id : new Guid().toString() , text : "Learn React" , completed : false}]);
+    const [todo , setTodo] = useState([{id : crypto.randomUUID() , text : "Learn React" , completed : false}]);
     const [newTodo , setNewTodo] = useState('');
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        addTodo(newTodo);
+    }
+
     const addTodo = (text) => {
         if(text.trim() === '') return;
-        setTodo([...todo , {id : new Guid().toString() , text , completed : false}]);
+        setTodo([...todo , {id : crypto.randomUUID() , text , completed : false}]);
         setNewTodo('');
     }
     return(
         <div>
             <h1>My Todo List</h1>
-            <form action="#">
+            <form onSubmit={handleSubmit}>
                <div>
                  <input type="text" placeholder='Type Here..' value={newTodo} onChange={(e) => setNewTodo(e.target.value)}/>
-                <button onSubmit={()=>addTodo(newTodo)}>Add</button>
+                <button type="submit">Add</button>
                </div>
                <div>
                  <ol>
                     {
-                        todo.map((item , index) => {
+                        todo.map((item) => {
                             return(
-                                <li key={index} ><input type="checkbox" value={item.completed}/>{item}</li>
+                                <li key={item.id} >
+                                    <input type="checkbox" value={item.completed}/>
+                                    {item.text} 
+                                    <button type="button" onSubmit={() => deleteTodo(id)}>
+                                        Delete
+                                    </button>
+                                </li>
                             )
                         })
                     }
